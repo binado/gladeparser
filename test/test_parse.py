@@ -7,12 +7,12 @@ from gladeparser.columns import Group
 from .fixtures import *
 
 class TestParse:
-    def test_parse(self, filename, columns):
+    def test_parse(self, filename, descriptor):
         indices = [
             Group.ID.value,
             Group.CATALOG_ID.value
         ]
-        cols = columns.get(*indices, names=True)
+        cols = descriptor.get_columns(*indices, names=True)
         df = to_df(filename, cols)
         assert df.columns.to_list() == cols
         assert len(df) == 50

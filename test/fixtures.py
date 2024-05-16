@@ -1,11 +1,11 @@
 import os
 import pytest
 
-from gladeparser.columns import GLADEColumns
+from gladeparser.columns import GLADEDescriptor
 
 @pytest.fixture
-def columns():
-    return GLADEColumns()
+def descriptor():
+    return GLADEDescriptor()
 
 @pytest.fixture
 def filename():

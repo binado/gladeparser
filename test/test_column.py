@@ -6,7 +6,11 @@ from gladeparser.columns import Group
 from .fixtures import *
 
 class TestColumn:
-    def test_column_names(self, columns, column_names):
+    def test_groups(self, descriptor):
+        table_groups = [g.value for g in Group]
+        assert table_groups == descriptor.groups
+
+    def test_column_names(self, descriptor, column_names):
         ids = [1, 2, 3, 4, 5, 6, 7, 8]
         names = [
             'GLADE no',
@@ -19,27 +23,27 @@ class TestColumn:
             'Object type flag'
         ]
 
-        assert columns.names(ids) == names
+        assert descriptor._names(ids) == names
 
         # All
-        assert columns.names() == column_names
+        assert descriptor._names() == column_names
 
-    def test_dtypes(self, columns):
+    def test_column_dtypes(self, descriptor):
         true_dtypes = [int] + [str] * 7 + [np.float64] * 32
-        dtypes = list(columns.dtypes.values())
+        dtypes = list(descriptor.column_dtypes.values())
         assert true_dtypes == dtypes
 
-    def test_get(self, columns, column_names):
+    def test_get(self, descriptor, column_names):
         identifier_ids = [2, 3, 4, 5, 6, 7]
 
         # Direct ID
         args = identifier_ids
-        ids = columns.get(*args)
+        ids = descriptor.get_columns(*args)
         assert ids == identifier_ids
 
         # ID per group
         args = [Group.CATALOG_ID.value]
-        ids = columns.get(*args)
+        ids = descriptor.get_columns(*args)
         assert ids == identifier_ids
 
         # ID per column name
@@ -51,18 +55,22 @@ class TestColumn:
             'WISExSCOS name',
             'SDSS-DR16Q name'
         ]
-        ids = columns.get(*args)
+        ids = descriptor.get_columns(*args)
         assert ids == identifier_ids
-        names = columns.get(*args, names=True)
+        names = descriptor.get_columns(*args, names=True)
         assert names == args
+
+        # Invalid ids
+        with pytest.raises(ValueError):
+            descriptor.get_columns(3.14)
 
         # Repeated ids
         args = identifier_ids + [Group.CATALOG_ID.value]
-        ids = columns.get(*args)
+        ids = descriptor.get_columns(*args)
         assert ids == identifier_ids
 
         # All rows
-        names = columns.get(names=True)
+        names = descriptor.get_columns(names=True)
         assert names == column_names
 
         
