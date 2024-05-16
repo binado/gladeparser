@@ -1,8 +1,8 @@
 import pandas as pd
 
-from .columns import GLADEColumns
+from .columns import GLADEDescriptor
 
-def to_df(filename, cols, filter_fn=None, chunksize=200000, progress=None, **kwargs):
+def to_df(filename, cols=None, filter_fn=None, chunksize=200000, progress=None, **kwargs):
     """Parse the GlADE+ text file into a Pandas DataFrame.
     Uses Pandas.read_csv method.
 
@@ -11,7 +11,8 @@ def to_df(filename, cols, filter_fn=None, chunksize=200000, progress=None, **kwa
     filename : str
         The path to the GLADE+ text file
     cols : list
-        The list of columns to extract from the file. See `GlADECatalogTranslator.get_columns`
+        The list of columns to extract from the file. See `GlADEDescriptor.get_columns`.
+        If None, will return all columns. By default None.
     filter_fn : function
         A filter function to be executed on each DataFrame chunk. By default None.
     chunksize : int, optional
@@ -24,12 +25,13 @@ def to_df(filename, cols, filter_fn=None, chunksize=200000, progress=None, **kwa
     Pandas.DataFrame
         The DataFrame containing the extracted columns after filtering out the data
     """
-    glade_columns = GLADEColumns()
+    descriptor = GLADEDescriptor()
+    all_columns = descriptor.get_columns(names=True)
     reader_args = dict(
         sep=" ",
-        names=glade_columns.names(),
+        names=all_columns,
         usecols=cols,
-        dtype=glade_columns.dtypes,
+        dtype=descriptor.column_dtypes,
         header=None,
         false_values=["null"],
         chunksize=chunksize,
@@ -46,7 +48,7 @@ def to_df(filename, cols, filter_fn=None, chunksize=200000, progress=None, **kwa
 
     return catalog
 
-def to_hdf5(filename, output_filename, hdf5_key, cols, filter_fn=None, chunksize=200000, progress=None, **kwargs):
+def to_hdf5(filename, output_filename, hdf5_key, cols=None, filter_fn=None, chunksize=200000, progress=None, **kwargs):
     """Parse the GlADE+ text file onto an HDF5 file.
     Uses Pandas.read_csv method.
 
@@ -59,7 +61,8 @@ def to_hdf5(filename, output_filename, hdf5_key, cols, filter_fn=None, chunksize
     hdf5_key: str
         The hdf5 key to put the data
     cols : list
-        The list of columns to extract from the file. See `GlADECatalogTranslator.get_columns`
+        The list of columns to extract from the file. See `GlADEDescriptor.get_columns`. 
+        If None, will return all columns. By default None.
     filter_fn : function
         A filter function to be executed on each DataFrame chunk. By default None.
     chunksize : int, optional
@@ -67,12 +70,13 @@ def to_hdf5(filename, output_filename, hdf5_key, cols, filter_fn=None, chunksize
     progress :  optional
         A progress bar decorator, such as tqdm.tqdm. By default None.
     """
-    glade_columns = GLADEColumns()
+    descriptor = GLADEDescriptor()
+    all_columns = descriptor.get_columns(names=True)
     reader_args = dict(
         sep=" ",
-        names=glade_columns.names(),
+        names=all_columns,
         usecols=cols,
-        dtype=glade_columns.dtypes,
+        dtype=descriptor.column_dtypes,
         header=None,
         false_values=["null"],
         chunksize=chunksize,

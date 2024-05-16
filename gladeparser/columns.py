@@ -31,18 +31,22 @@ class Group(str, Enum):
     def dtype(self):
         return _dtypes[self.name]
 
-class GLADEColumns:
+class GLADEDescriptor:
     def __init__(self):
         self._columns = pd.read_csv(column_filepath, index_col='Column ID')
+
+    @property
+    def groups(self):
+        return list(dict.fromkeys(self._columns['Group']))
     
     @property
-    def dtypes(self):
-        dtype_list = self._columns['Group'].map(_dtypes).to_list()
-        return dict(zip(self.names(), dtype_list))
+    def column_dtypes(self):
+        dtype_list = self._columns['Group'].map(_dtypes)
+        return dict(zip(self._names(), dtype_list))
     
-    def names(self, indices=None):
-        series = self._columns['Column Name']
-        filtered = series[indices] if indices is not None else series[:]
+    def _names(self, indices=None):
+        names = self._columns['Column Name']
+        filtered = names[indices] if indices is not None else names[:]
         return filtered.to_list()
     
     def _get_index(self, column):
@@ -50,19 +54,21 @@ class GLADEColumns:
             return [column]
         if not isinstance(column, str):
             raise ValueError
+
         try:
             Group(column)
-            return self._columns.query(f'Group == "{column}"').index.to_list()
+            query = f'Group == "{column}"'
         except ValueError:
-            return self._columns.query(f'`Column Name` == "{column}"').index.to_list()
+            query = f'`Column Name` == "{column}"'
+        return self._columns.query(query).index.to_list()
     
-    def get(self, *args, names=False):
+    def get_columns(self, *args, names=False):
         columns = []
         for arg in args:
             columns += self._get_index(arg)
         # Normalize
         if len(columns) == 0:
-            indices = self._columns.index.to_list()
+            indices = None
         else:
             indices = sorted(list(set(columns)))
-        return self.names(indices) if names else indices
+        return self._names(indices) if names else indices
