@@ -82,8 +82,8 @@ def to_hdf5(filename, output_filename, hdf5_key, cols=None, filter_fn=None, chun
         chunksize=chunksize,
         **kwargs,
     )
-    store = pd.HDFStore(filename, mode='w')
-    with pd.read_csv(output_filename, **reader_args) as reader:
+    store = pd.HDFStore(output_filename, mode='w')
+    with pd.read_csv(filename, **reader_args) as reader:
         iterator = progress(reader) if progress else reader
         fn = filter_fn if filter_fn is not None else lambda x: x
         for chunk in iterator:
