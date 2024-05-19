@@ -35,6 +35,9 @@ class GLADEDescriptor:
     def __init__(self):
         self._columns = pd.read_csv(column_filepath, index_col='Column ID')
 
+    def __str__(self):
+        return str(self._columns)
+
     @property
     def groups(self):
         return list(dict.fromkeys(self._columns['Group']))
