@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 
 from gladeparser.columns import Group
-from .fixtures import *
+
 
 class TestColumn:
     def test_groups(self, descriptor):
@@ -13,14 +13,14 @@ class TestColumn:
     def test_column_names(self, descriptor, column_names):
         ids = [1, 2, 3, 4, 5, 6, 7, 8]
         names = [
-            'GLADE no',
-            'PGC no',
-            'GWGC name',
-            'HyperLEDA name',
-            '2MASS name',
-            'WISExSCOS name',
-            'SDSS-DR16Q name',
-            'Object type flag'
+            "GLADE no",
+            "PGC no",
+            "GWGC name",
+            "HyperLEDA name",
+            "2MASS name",
+            "WISExSCOS name",
+            "SDSS-DR16Q name",
+            "Object type flag",
         ]
 
         assert descriptor._names(ids) == names
@@ -48,12 +48,12 @@ class TestColumn:
 
         # ID per column name
         args = [
-            'PGC no',
-            'GWGC name',
-            'HyperLEDA name',
-            '2MASS name',
-            'WISExSCOS name',
-            'SDSS-DR16Q name'
+            "PGC no",
+            "GWGC name",
+            "HyperLEDA name",
+            "2MASS name",
+            "WISExSCOS name",
+            "SDSS-DR16Q name",
         ]
         ids = descriptor.get_columns(*args)
         assert ids == identifier_ids
@@ -72,5 +72,3 @@ class TestColumn:
         # All rows
         names = descriptor.get_columns(names=True)
         assert names == column_names
-
-        
