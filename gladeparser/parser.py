@@ -1,11 +1,18 @@
+from typing import Callable, Optional
+
 import pandas as pd
+from tqdm import tqdm
 
 from .columns import GLADEDescriptor
 
 
 def to_df(
-    filename, cols=None, filter_fn=None, chunksize=200000, progress=None, **kwargs
-):
+    filename: str,
+    cols: Optional[list] = None,
+    filter_fn: Optional[Callable[[pd.DataFrame], pd.DataFrame]] = None,
+    chunksize: int = 200000,
+    **kwargs,
+) -> pd.DataFrame:
     """Parse the GlADE+ text file into a Pandas DataFrame.
     Uses Pandas.read_csv method.
 
@@ -13,15 +20,13 @@ def to_df(
     ----------
     filename : str
         The path to the GLADE+ text file
-    cols : list
+    cols : list, optional
         The list of columns to extract from the file. See `GlADEDescriptor.get_columns`.
         If None, will return all columns. By default None.
-    filter_fn : function
+    filter_fn : Callable[[pd.DataFrame], pd.DataFrame], optional
         A filter function to be executed on each DataFrame chunk. By default None.
     chunksize : int, optional
         The chunksize argument of read_csv. Defaults to 200000, which corresponds to roughly 100 iterations
-    progress :  optional
-        A progress bar decorator, such as tqdm.tqdm. By default None.
 
     Returns
     -------
@@ -42,9 +47,8 @@ def to_df(
     )
     chunks = []
     with pd.read_csv(filename, **reader_args) as reader:
-        iterator = progress(reader) if progress else reader
         fn = filter_fn if filter_fn is not None else lambda x: x
-        for chunk in iterator:
+        for chunk in tqdm(reader):
             chunks.append(fn(chunk))
 
         catalog = pd.concat(chunks, ignore_index=True)
