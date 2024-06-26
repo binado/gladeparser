@@ -1,5 +1,7 @@
 # gladeparser
 
+![tests](https://github.com/binado/gladeparser/actions/workflows/test.yml/badge.svg)
+
 Parser for the [GLADE+ galaxy catalog](https://glade.elte.hu/).
 
 ## Usage
