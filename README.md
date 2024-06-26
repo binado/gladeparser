@@ -2,26 +2,27 @@
 
 Parser for the [GLADE+ galaxy catalog](https://glade.elte.hu/).
 
-## Using the package
+## Usage
 
 To read the catalog into a `pandas.DataFrame`:
 
 ```python
 from gladeparser import to_df
 
-filename = # path to GLADE+ calataog
+filename = "path/to/catalog"
 df = to_df(filename)
 ```
 
-To parse only a subset of rows:
+### Parsing a subset of columns
 
 ```python
 from gladeparser import to_df, get_columns
 
 # Select the columns you want and return their names
+# See more options in get_columns docstring
 cols = get_columns('Localization', 'Distance', names=True)
 
-filename = # path to GLADE+ calataog
+filename = "path/to/catalog"
 df = to_df(filename, cols=cols)
 ```
 
