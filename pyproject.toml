@@ -21,6 +21,7 @@ Homepage = "https://github.com/binado/gladeparser"
 [project.scripts]
 
 [project.optional-dependencies]
+ci = ['pytest']
 dev = ['pytest', 'ruff', 'pre-commit']
 
 [tool.setuptools.packages.find]
