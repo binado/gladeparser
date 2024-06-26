@@ -7,7 +7,7 @@ Parser for the [GLADE+ galaxy catalog](https://glade.elte.hu/).
 To read the catalog into a `pandas.DataFrame`:
 
 ```python
-from gladeparser.parser import to_df
+from gladeparser import to_df
 
 filename = # path to GLADE+ calataog
 df = to_df(filename)
@@ -16,21 +16,18 @@ df = to_df(filename)
 To parse only a subset of rows:
 
 ```python
-from gladeparser.parser import to_df
-from gladeparser.columns import GLADEDescriptor
-
-gc = GLADEDescriptor()
+from gladeparser import to_df, get_columns
 
 # Select the columns you want and return their names
-cols = gc.get_columns('Localization', 'Distance', names=True)
+cols = get_columns('Localization', 'Distance', names=True)
 
 filename = # path to GLADE+ calataog
-df = to_df(filename, cols)
+df = to_df(filename, cols=cols)
 ```
 
 ## Installation
 
-Clone the repo and run 
+Clone the repo and run
 
 ```bash
 pip install .
@@ -44,7 +41,7 @@ Make sure that you have `pytest` installed, or run
 pip install .[dev]
 ```
 
-Then run 
+Then run
 
 ```bash
 pytest
