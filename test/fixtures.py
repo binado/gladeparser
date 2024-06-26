@@ -1,21 +1,3 @@
-import os
-import pytest
-
-from gladeparser.columns import GLADEDescriptor
-
-
-@pytest.fixture
-def descriptor():
-    return GLADEDescriptor()
-
-
-@pytest.fixture
-def filename():
-    dirname = os.getcwd()
-    return os.path.join(dirname, "test/mock.txt")
-
-
-@pytest.fixture
 def column_names():
     return [
         "GLADE no",

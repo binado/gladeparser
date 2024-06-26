@@ -4,11 +4,15 @@ import numpy as np
 from pandas import read_hdf
 
 from gladeparser.parser import to_df, to_hdf5
-from gladeparser.columns import Group
+from gladeparser.columns import Group, GLADEDescriptor
+
+descriptor = GLADEDescriptor()
+dirname = os.getcwd()
+filename = os.path.join(dirname, "test/mock.txt")
 
 
 class TestParse:
-    def test_parse_to_df(self, filename, descriptor):
+    def test_parse_to_df(self):
         indices = [Group.ID.value, Group.CATALOG_ID.value]
         cols = descriptor.get_columns(*indices, names=True)
         df = to_df(filename, cols)
@@ -21,7 +25,7 @@ class TestParse:
         assert np.isnan(last_line["GWGC name"])
         assert np.isnan(last_line["HyperLEDA name"])
 
-    def test_parse_to_hdf5(self, filename, descriptor):
+    def test_parse_to_hdf5(self):
         indices = [Group.ID.value, Group.CATALOG_ID.value]
         cols = descriptor.get_columns(*indices, names=True)
         dirname = os.getcwd()
