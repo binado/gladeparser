@@ -4,7 +4,7 @@ import numpy as np
 from pandas import read_hdf
 
 from gladeparser.parser import to_df, to_hdf5
-from gladeparser.columns import Group, GLADEDescriptor
+from gladeparser.columns import Group, GLADEDescriptor, get_columns
 
 descriptor = GLADEDescriptor()
 dirname = os.getcwd()
@@ -14,7 +14,7 @@ filename = os.path.join(dirname, "test/mock.txt")
 class TestParse:
     def test_parse_to_df(self):
         indices = [Group.ID.value, Group.CATALOG_ID.value]
-        cols = descriptor.get_columns(*indices, names=True)
+        cols = get_columns(*indices)
         df = to_df(filename, cols)
         assert df.columns.to_list() == cols
         assert len(df) == 50
@@ -27,7 +27,7 @@ class TestParse:
 
     def test_parse_to_hdf5(self):
         indices = [Group.ID.value, Group.CATALOG_ID.value]
-        cols = descriptor.get_columns(*indices, names=True)
+        cols = get_columns(*indices)
         dirname = os.getcwd()
         outfile = os.path.join(dirname, "out.hdf5")
         hdf5_key = "test_key"
