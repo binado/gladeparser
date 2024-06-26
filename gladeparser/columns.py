@@ -96,4 +96,38 @@ class GLADEDescriptor:
 
 
 def get_columns(*args: Union[int, str]) -> List[str]:
+    """Parse column identifiers and return subset of GLADE+ column names.
+
+    Parameters
+    ----------
+    args: int | str:
+        List of column identifier. Each entry may be a GLADE+ column id, column name or group.
+
+    Returns
+    -------
+    list
+        List of GLADE+ column names based on selection
+
+    Examples
+    --------
+    Getting columns by id:
+
+    >>> get_columns(1, 2, 3)
+    ['GLADE no', 'PGC no', 'GWGC name']
+
+    Getting columns by name:
+
+    >>> get_columns("z_cmb", "z flag", "v_err", "z_err")
+    ['z_cmb', 'z flag', 'v_err', 'z_err']
+
+    Getting columns by group:
+
+    >>> get_columns("Mass")
+    ['M*', 'M*_err', 'M* flag']
+
+    Mixed inputs:
+
+    >>> get_columns(1, 2, 3, "z_cmb", "Mass")
+    ['GLADE no', 'PGC no', 'GWGC name', 'z_cmb', 'M*', 'M*_err', 'M* flag']
+    """
     return GLADEDescriptor().get_columns(*args)
