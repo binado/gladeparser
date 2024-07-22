@@ -42,11 +42,10 @@ def to_df(
         header=None,
         false_values=["null"],
         chunksize=chunksize,
-        **kwargs,
     )
     chunks = []
     _desc = "Parsing GLADE+ catalog with the desired options"
-    with pd.read_csv(filename, **reader_args) as reader:
+    with pd.read_csv(filename, **reader_args, **kwargs) as reader:
         fn = filter_fn if filter_fn is not None else lambda x: x
         for chunk in tqdm(reader, desc=_desc):
             chunks.append(fn(chunk))
@@ -96,11 +95,10 @@ def to_hdf5(
         header=None,
         false_values=["null"],
         chunksize=chunksize,
-        **kwargs,
     )
     _desc = "Parsing GLADE+ catalog with the desired options"
     with pd.HDFStore(output_filename, mode="w", complevel=complevel) as store:
-        with pd.read_csv(filename, **reader_args) as reader:
+        with pd.read_csv(filename, **reader_args, **kwargs) as reader:
             fn = filter_fn if filter_fn is not None else lambda x: x
             for chunk in tqdm(reader, desc=_desc):
                 store.append(hdf5_key, fn(chunk))
