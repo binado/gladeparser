@@ -4,6 +4,7 @@ from typing import Union, List
 
 import numpy as np
 import pandas as pd
+import polars as pl
 
 COLUMNS_FILENAME = "columns.csv"
 
@@ -16,6 +17,25 @@ DTYPES = {
     "Distance": np.float64,
     "Mass": np.float64,
     "Merger rate": np.float64,
+}
+
+POLARS_DTYPES = {
+    "ID": pl.Int32(),
+    "Catalog ID": pl.String(),
+    "Object type flag": pl.String(),
+    "Localization": pl.Float64(),
+    "Magnitude": pl.Float64(),
+    "Distance": pl.Float64(),
+    "Mass": pl.Float64(),
+    "Merger rate": pl.Float64(),
+}
+
+POLARS_DTYPES_OVERRIDES = {
+    "B flag": pl.Int8(),
+    "W1 flag": pl.Int8(),
+    "z flag": pl.Int8(),
+    "dist flag": pl.Int8(),
+    "M* flag": pl.Int8(),
 }
 
 
@@ -62,6 +82,13 @@ class GLADEDescriptor:
     def column_dtypes(self):
         dtype_list = self._columns["Group"].map(DTYPES)
         return dict(zip(self.names, dtype_list))
+
+    @property
+    def polars_schema(self):
+        dtype_list = self._columns["Group"].map(POLARS_DTYPES)
+        dtype_dict = dict(zip(self.names, dtype_list))
+        dtype_dict.update(**POLARS_DTYPES_OVERRIDES)
+        return pl.Schema(dtype_dict)
 
     def _index_to_name(self, indices: List[int]) -> List[str]:
         return self._columns["Column Name"][indices].to_list()
