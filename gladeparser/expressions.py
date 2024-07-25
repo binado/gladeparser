@@ -1,11 +1,12 @@
+from typing import Tuple
 import polars as pl
 
 
-def filter_by_valid_redshifts(zmin: float = 0.0):
+def filter_by_valid_redshifts(zmin: float = 0.0) -> Tuple[pl.Expr, pl.Expr]:
     return (pl.col("z_cmb") > zmin, pl.col("z_cmb").is_not_null())
 
 
-def filter_by_catalog_name(catalog_name: str):
+def filter_by_catalog_name(catalog_name: str) -> Tuple[pl.Expr]:
     return (pl.col(catalog_name).is_not_null(),)
 
 
