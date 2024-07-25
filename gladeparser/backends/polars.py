@@ -38,8 +38,8 @@ def to_polars_df(
         new_columns=descriptor.names,
         null_values=["null"],
         **kwargs,
-    ).select(*(cols or descriptor.names))
+    )
     if len(expr) > 0:
         query = query.filter(*expr)
 
-    return query.collect()
+    return query.select(*(cols or descriptor.names)).collect()
