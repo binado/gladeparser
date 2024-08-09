@@ -4,6 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "gladeparser"
+version = "0.2.0"
 authors = [
     { name = "Bernardo Veronese", email = "bernardo.veronese@edu.ufes.br" },
 ]
