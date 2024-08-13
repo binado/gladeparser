@@ -34,7 +34,7 @@ filters = (
 cols = ["ra", "dec", "z_cmb"]
 
 filename = "path/to/catalog"
-df = to_polars_df(filename, cols=cols, **filters)
+df = to_polars_df(filename, *filters, cols=cols)
 ```
 
 ### Parsing a subset of columns
